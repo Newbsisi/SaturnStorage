@@ -34,9 +34,17 @@ public class Homepage {
         searchPanel.add(b, BorderLayout.NORTH);
         searchPanel.add(buttonPanel, BorderLayout.CENTER);
 
-        a.add(searchPanel);
+        JLabel usernameLabel = new JLabel("Username");
+        JButton returnButton = new JButton("Return");
 
-        a.setSize(600, 400);
+        JPanel userPanel = new JPanel(new BorderLayout());
+        userPanel.add(usernameLabel, BorderLayout.WEST);
+        userPanel.add(returnButton, BorderLayout.EAST);
+
+        a.add(searchPanel);
+        a.add(userPanel, BorderLayout.NORTH);
+
+        a.setSize(800, 500);
         a.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         a.setVisible(true);
     }
