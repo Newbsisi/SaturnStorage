@@ -1,5 +1,9 @@
+import java.sql.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.*;
+
+
 
 public class LoginScreen extends JFrame implements ActionListener {
     JTextField usernameField;
@@ -32,19 +36,26 @@ public class LoginScreen extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == submitButton) {
-            // Retrieve the entered username and password
-            String username = usernameField.getText();
-            String password = new String(passwordField.getPassword());
-
-            // Check the credentials against a stored database
-            if (username.equals("admin") && password.equals("password")) {
-                JOptionPane.showMessageDialog(this, "Login successful!");
-                // Proceed to the main program
-            } else {
-                JOptionPane.showMessageDialog(this, "Incorrect username or password.");
-                // Allow the user to try again
-                usernameField.setText("");
-                passwordField.setText("");
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                String username = usernameField.getText();
+                String password = new String(passwordField.getPassword());
+                Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/users", "user_auth", "password");
+                String sql = "SELECT * FROM usernames_and_passwords WHERE username = ? AND password = ?";
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, username);
+                statement.setString(2, password);
+                
+                ResultSet result = statement.executeQuery();
+                if (result.next()) {
+                    JOptionPane.showMessageDialog(this, "Login successful!");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Login was not successful!");
+                }
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
         }
     }
