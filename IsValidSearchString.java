@@ -13,7 +13,7 @@ public class IsValidSearchString {
             } else if (input.length() > MAX_LENGTH) {
                 JOptionPane.showMessageDialog(null, "Search input cannot be longer than " + MAX_LENGTH + " characters.", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
-                // do something with the valid input, such as perform a search
+                //Performing search
                 JOptionPane.showMessageDialog(null, "Performing search for \"" + input + "\"");
             }
         }
