@@ -6,8 +6,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class HomePage extends JFrame {
-    public static void main(String[] args) {
-        JFrame a = new JFrame("SaturnStorage");
+    
+    public HomePage() {
+        super("SaturnStorage");
+        
         JTextField b = new JTextField("Search");
         b.setPreferredSize(new Dimension(250,30));
         JButton searchButton = new JButton("Search");
@@ -26,8 +28,6 @@ public class HomePage extends JFrame {
                 }
             }
         });
-
-
 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchPanel.add(b);
@@ -67,13 +67,14 @@ public class HomePage extends JFrame {
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
         mainPanel.add(userPanel, BorderLayout.SOUTH);
 
-        a.add(mainPanel);
+        this.add(mainPanel);
 
-        a.setSize(800, 500);
-        a.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        a.setVisible(true);
+        this.setSize(800, 500);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setVisible(true);
     }
 
-    public void setVisible(boolean b) {
+    public static void main(String[] args) {
+        HomePage homePage = new HomePage();
     }
 }
