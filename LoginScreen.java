@@ -56,7 +56,7 @@ public class LoginScreen extends JFrame implements ActionListener {
                 if (result.next()) {
                     JOptionPane.showMessageDialog(this, "Login successful!");
                     HomePage homePage = new HomePage();
-                    HomePage.setVisible(true);
+                    homePage.setVisible(true);
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "Login was not successful!");

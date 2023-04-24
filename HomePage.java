@@ -74,6 +74,6 @@ public class HomePage extends JFrame {
         a.setVisible(true);
     }
 
-    public static void setVisible(boolean b) {
+    public void setVisible(boolean b) {
     }
 }
