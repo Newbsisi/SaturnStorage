@@ -6,9 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 
 
 public class LoginScreen extends JFrame implements ActionListener {
@@ -57,6 +54,7 @@ public class LoginScreen extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(this, "Login successful!");
                     HomePage homePage = new HomePage();
                     homePage.setVisible(true);
+                    dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "Login was not successful!");
                 }
