@@ -48,6 +48,9 @@ public class LoginScreen extends JFrame implements ActionListener {
                 ResultSet result = statement.executeQuery();
                 if (result.next()) {
                     JOptionPane.showMessageDialog(this, "Login successful!");
+                    request.getSession().setAttribute("loggedIn", true);
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/Homepage");
+                    dispatcher.forward(request, response);
                 } else {
                     JOptionPane.showMessageDialog(this, "Login was not successful!");
                 }
