@@ -1,4 +1,11 @@
-public class Homepage {
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+public class HomePage extends JFrame {
     public static void main(String[] args) {
         JFrame a = new JFrame("SaturnStorage");
         JTextField b = new JTextField("Search");
@@ -65,5 +72,8 @@ public class Homepage {
         a.setSize(800, 500);
         a.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         a.setVisible(true);
+    }
+
+    public static void setVisible(boolean b) {
     }
 }
