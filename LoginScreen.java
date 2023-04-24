@@ -1,7 +1,6 @@
 import java.sql.*;
 import javax.swing.*;
 import java.awt.event.*;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -73,11 +72,11 @@ public class LoginScreen extends JFrame implements ActionListener {
 }
 
 public class Homepage {
-    if (request.getSession().getAttribute("loggedIn") == null) {
-        response.sendRedirect("LoginScreen");
-        return;
-    }
     public static void main(String[] args) {
+        if (request.getSession().getAttribute("loggedIn") == null) {
+            response.sendRedirect("LoginScreen");
+            return;
+        }
         JFrame a = new JFrame("SaturnStorage");
         JTextField b = new JTextField("Search");
         b.setPreferredSize(new Dimension(250,30));
