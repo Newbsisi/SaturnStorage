@@ -6,8 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+
+
 
 
 
@@ -42,16 +43,23 @@ public class LoginScreen extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == submitButton) {
+            String username = usernameField.getText();
+            String password = new String(passwordField.getPassword());
+
+            // Validate the username and password
+            if (!isValidUsername(username) || !isValidPassword(password)) {
+                JOptionPane.showMessageDialog(this, "Invalid username or password!");
+                return;
+            }
+
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                String username = usernameField.getText();
-                String password = new String(passwordField.getPassword());
-                Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/users", "user_auth", "password");
+                Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/?user=root", "root", "jtv78kgf");
                 String sql = "SELECT * FROM usernames_and_passwords WHERE username = ? AND password = ?";
                 PreparedStatement statement = connection.prepareStatement(sql);
                 statement.setString(1, username);
                 statement.setString(2, password);
-                
+
                 ResultSet result = statement.executeQuery();
                 if (result.next()) {
                     JOptionPane.showMessageDialog(this, "Login successful!");
@@ -66,6 +74,47 @@ public class LoginScreen extends JFrame implements ActionListener {
                 ex.printStackTrace();
             }
         }
+    }
+
+
+    private boolean isValidUsername(String username) {
+        // Check if the username is null or empty
+        if (username == null || username.isEmpty()) {
+            return false;
+        }
+
+        // Check if the username contains only alphanumeric characters
+        if (!username.matches("^[a-zA-Z0-9]+$")) {
+            return false;
+        }
+
+        // Check if the username is at least 6 characters long
+        if (username.length() < 6) {
+            return false;
+        }
+
+        // All validation checks have passed, so the username is valid
+        return true;
+    }
+
+    private boolean isValidPassword(String password) {
+        // Check if the password is null or empty
+        if (password == null || password.isEmpty()) {
+            return false;
+        }
+
+        // Check if the password is at least 8 characters long
+        if (password.length() < 8) {
+            return false;
+        }
+
+        // If the password contains at least one uppercase letter, one lowercase letter, and one digit
+        if (!password.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).+$")) {
+            return false;
+        }
+
+        // All validation checks have passed, so the password is valid
+        return true;
     }
 
     public static void main(String[] args) {
