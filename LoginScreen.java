@@ -1,8 +1,10 @@
 import java.sql.*;
 import javax.swing.*;
 import java.awt.event.*;
-
-
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.List;
 
 public class LoginScreen extends JFrame implements ActionListener {
     JTextField usernameField;
@@ -36,6 +38,15 @@ public class LoginScreen extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == submitButton) {
             try {
+                List<String> allowedIPs = Arrays.asList("192.168.0.239", "xxx.xxx.x.xxx");
+
+                String clientIP = InetAddress.getLocalHost().getHostAddress();
+
+                if (!allowedIPs.contains(clientIP)) {
+                    JOptionPane.showMessageDialog(this, "Access denied. Your IP address is not allowed.");
+                    return;
+                }
+
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 String username = usernameField.getText();
                 String password = new String(passwordField.getPassword());
@@ -44,7 +55,7 @@ public class LoginScreen extends JFrame implements ActionListener {
                 PreparedStatement statement = connection.prepareStatement(sql);
                 statement.setString(1, username);
                 statement.setString(2, password);
-                
+
                 ResultSet result = statement.executeQuery();
                 if (result.next()) {
                     JOptionPane.showMessageDialog(this, "Login successful!");
@@ -54,6 +65,8 @@ public class LoginScreen extends JFrame implements ActionListener {
             } catch (ClassNotFoundException ex) {
                 ex.printStackTrace();
             } catch (SQLException ex) {
+                ex.printStackTrace();
+            } catch (UnknownHostException ex) {
                 ex.printStackTrace();
             }
         }
