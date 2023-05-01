@@ -7,11 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-
-
-
-
-
 public class LoginScreen extends JFrame implements ActionListener {
     JTextField usernameField;
     JPasswordField passwordField;
@@ -54,7 +49,7 @@ public class LoginScreen extends JFrame implements ActionListener {
 
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/?user=root", "root", "jtv78kgf");
+                Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/users", "user_auth", "password");
                 String sql = "SELECT * FROM usernames_and_passwords WHERE username = ? AND password = ?";
                 PreparedStatement statement = connection.prepareStatement(sql);
                 statement.setString(1, username);
@@ -75,7 +70,6 @@ public class LoginScreen extends JFrame implements ActionListener {
             }
         }
     }
-
 
     private boolean isValidUsername(String username) {
         // Check if the username is null or empty
@@ -112,7 +106,6 @@ public class LoginScreen extends JFrame implements ActionListener {
         if (!password.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).+$")) {
             return false;
         }
-
         // All validation checks have passed, so the password is valid
         return true;
     }
@@ -121,3 +114,4 @@ public class LoginScreen extends JFrame implements ActionListener {
         new LoginScreen();
     }
 }
+
