@@ -2,10 +2,6 @@ import java.sql.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class LoginScreen extends JFrame implements ActionListener {
     JTextField usernameField;
@@ -18,6 +14,13 @@ public class LoginScreen extends JFrame implements ActionListener {
         JLabel passwordLabel = new JLabel("Password:");
         usernameField = new JTextField(20);
         passwordField = new JPasswordField(20);
+        passwordField.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    validateLogin();
+                }
+            }
+        });
         submitButton = new JButton("Submit");
         submitButton.addActionListener(this);
 
@@ -38,36 +41,40 @@ public class LoginScreen extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == submitButton) {
-            String username = usernameField.getText();
-            String password = new String(passwordField.getPassword());
+            validateLogin();
+        }
+    }
 
-            // Validate the username and password
-            if (!isValidUsername(username) || !isValidPassword(password)) {
-                JOptionPane.showMessageDialog(this, "Invalid username or password!");
-                return;
+    private void validateLogin() {
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+
+        // Validate the username and password
+        if (!isValidUsername(username) || !isValidPassword(password)) {
+            JOptionPane.showMessageDialog(this, "Invalid username or password!");
+            return;
+        }
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/users", "user_auth", "password");
+            String sql = "SELECT * FROM usernames_and_passwords WHERE username = ? AND password = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            statement.setString(2, password);
+
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                JOptionPane.showMessageDialog(this, "Login successful!");
+                HomePage homePage = new HomePage();
+                homePage.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Login was not successful!");
             }
-
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/users", "user_auth", "password");
-                String sql = "SELECT * FROM usernames_and_passwords WHERE username = ? AND password = ?";
-                PreparedStatement statement = connection.prepareStatement(sql);
-                statement.setString(1, username);
-                statement.setString(2, password);
-
-                ResultSet result = statement.executeQuery();
-                if (result.next()) {
-                    JOptionPane.showMessageDialog(this, "Login successful!");
-                    HomePage homePage = new HomePage();
-                    homePage.setVisible(true);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Login was not successful!");
-                }
-            } catch (ClassNotFoundException ex) {
-                ex.printStackTrace();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -105,13 +112,16 @@ public class LoginScreen extends JFrame implements ActionListener {
         // If the password contains at least one uppercase letter, one lowercase letter, and one digit
         if (!password.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).+$")) {
             return false;
+
         }
+
         // All validation checks have passed, so the password is valid
         return true;
     }
 
-    public static void main(String[] args) {
-        new LoginScreen();
+
+        public static void main (String[]args){
+            new LoginScreen();
+        }
     }
-}
 
