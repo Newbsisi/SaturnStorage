@@ -38,7 +38,7 @@ public class LoginScreen extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == submitButton) {
             try {
-                List<String> allowedIPs = Arrays.asList("192.168.0.239", "xxx.xxx.x.xxx");
+                List<String> allowedIPs = Arrays.asList("192.168.0.239", "192.168.56.1");
 
                 String clientIP = InetAddress.getLocalHost().getHostAddress();
 
