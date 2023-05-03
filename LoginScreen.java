@@ -1,7 +1,6 @@
 import java.sql.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.*;
 
 public class LoginScreen extends JFrame implements ActionListener {
     JTextField usernameField;
@@ -37,6 +36,7 @@ public class LoginScreen extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
+
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -68,6 +68,7 @@ public class LoginScreen extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Login successful!");
                 HomePage homePage = new HomePage();
                 homePage.setVisible(true);
+                dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Login was not successful!");
             }
