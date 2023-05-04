@@ -35,7 +35,7 @@ public class LoginHasher {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/users", "user_auth", "password");
     
             // Retrieve the stored hashed login information for the user
-            PreparedStatement stmt = conn.prepareStatement("SELECT password FROM users WHERE username = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT password FROM usernames_and_passwords WHERE username = ?");
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
             String storedHashedLoginInfo = null;
