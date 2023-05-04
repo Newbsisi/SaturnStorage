@@ -33,7 +33,7 @@ public class LoginHasher {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/users", "user_auth", "password");
-
+    
             // Retrieve the stored hashed login information for the user
             PreparedStatement stmt = conn.prepareStatement("SELECT password FROM users WHERE username = ?");
             stmt.setString(1, username);
@@ -45,9 +45,10 @@ public class LoginHasher {
             rs.close();
             stmt.close();
             conn.close();
-
+    
             // Hash the entered login information and compare it to the stored hash
             String enteredHashedLoginInfo = hashLoginInfo(username, enteredLoginInfo.substring(username.length()));
+            System.out.println("Entered hash: " + enteredHashedLoginInfo); // Print out the entered hash
             if (enteredHashedLoginInfo.equals(storedHashedLoginInfo)) {
                 System.out.println("Valid login information");
             } else {
