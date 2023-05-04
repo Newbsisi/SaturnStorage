@@ -25,6 +25,7 @@ public class LoginHasher {
     }
 
     public static void main(String[] args) {
+        
         String username = "user123";
         String password = "p@ssw0rd";
         String enteredLoginInfo = "user123p@ssw0rd";
