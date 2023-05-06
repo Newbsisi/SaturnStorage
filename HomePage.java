@@ -1,9 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.sql.*;
 
 
@@ -17,12 +14,6 @@ public class HomePage extends JFrame {
         String password = "password";
         return DriverManager.getConnection(url, username, password);
     }
-    private JTable getReadOnlyTable(String category) throws SQLException {
-        ResultSet resultSet = getDataFromDatabase(category);
-        JTable table = new JTable(ProductTable.buildTableModel(resultSet));
-        table.setEnabled(false); // disable editing
-        return table;
-    }
 
     //Fetching data from product database
     private ResultSet getDataFromDatabase(String category) throws SQLException {
@@ -33,13 +24,59 @@ public class HomePage extends JFrame {
         return resultSet;
     }
 
+    // table methods
+    private JTable getReadOnlyTable(String category) throws SQLException {
+        ResultSet resultSet = getDataFromDatabase(category);
+        JTable table = new JTable(ProductTable.buildTableModel(resultSet)) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // set single row selection mode
+        table.setRowHeight(20); // set row height
+        table.setGridColor(Color.BLACK); // set grid color
+        table.setShowGrid(true); // show grid lines
+
+        // create popup menu
+        JPopupMenu popupMenu = new JPopupMenu();
+        JMenuItem loanMenuItem = new JMenuItem("Loan");
+        loanMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // handle loan button click
+                JOptionPane.showMessageDialog(table, "Item loaned!");
+            }
+        });
+        popupMenu.add(loanMenuItem);
+
+        // add mouse listener to table
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    int row = table.rowAtPoint(e.getPoint());
+                    if (row >= 0 && row < table.getRowCount()) {
+                        table.setRowSelectionInterval(row, row);
+                        popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                    }
+                }
+            }
+        });
+
+        return table;
+    }
+
+
     public HomePage() {
         super("SaturnStorage");
-
 
         JTextField b = new JTextField("Search");
         b.setPreferredSize(new Dimension(250,30));
         JButton searchButton = new JButton("Search");
+
+
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -69,7 +106,6 @@ public class HomePage extends JFrame {
         JButton microphoneB = new JButton("Microphone");
 
 
-
         JPanel buttonPanel = new JPanel(new GridLayout(6, 1));
         buttonPanel.add(cameraB);
         buttonPanel.add(lightB);
@@ -77,7 +113,6 @@ public class HomePage extends JFrame {
         buttonPanel.add(propsB);
         buttonPanel.add(camerastandsB);
         buttonPanel.add(microphoneB);
-
 
         //Calling the different tables from database
         cameraB.addActionListener(new ActionListener() {
@@ -97,8 +132,7 @@ public class HomePage extends JFrame {
             }
         });
 
-// repeat for other categories
-
+        // repeat for other categories
 
         lightB.addActionListener(new ActionListener() {
             @Override
@@ -117,8 +151,7 @@ public class HomePage extends JFrame {
             }
         });
 
-// repeat for other categories
-
+        // repeat for other categories
 
         cablesB.addActionListener(new ActionListener() {
             @Override
@@ -137,8 +170,7 @@ public class HomePage extends JFrame {
             }
         });
 
-// repeat for other categories
-
+        // repeat for other categories
 
         propsB.addActionListener(new ActionListener() {
             @Override
@@ -157,8 +189,7 @@ public class HomePage extends JFrame {
             }
         });
 
-// repeat for other categories
-
+        // repeat for other categories
 
         camerastandsB.addActionListener(new ActionListener() {
             @Override
@@ -177,8 +208,7 @@ public class HomePage extends JFrame {
             }
         });
 
-// repeat for other categories
-
+        // repeat for other categories
 
         microphoneB.addActionListener(new ActionListener() {
             @Override
@@ -197,9 +227,7 @@ public class HomePage extends JFrame {
             }
         });
 
-// repeat for other categories
-
-
+        // Layout constraints
         cameraB.setPreferredSize(new Dimension(200, 30));
         lightB.setPreferredSize(new Dimension(200, 30));
         cablesB.setPreferredSize(new Dimension(200, 30));

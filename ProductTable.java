@@ -25,11 +25,11 @@ public class ProductTable {
             for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
                 row.add(rs.getObject(columnIndex));
             }
+
             data.add(row);
         }
 
         return new DefaultTableModel(data, columnNames);
     }
-
-
 }
+
