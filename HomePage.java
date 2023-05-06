@@ -4,7 +4,6 @@ import java.awt.event.*;
 import java.sql.*;
 
 
-
 public class HomePage extends JFrame {
 
     //Database connection
@@ -75,6 +74,7 @@ public class HomePage extends JFrame {
         JTextField b = new JTextField("Search");
         b.setPreferredSize(new Dimension(250,30));
         JButton searchButton = new JButton("Search");
+        JButton returnButton = new JButton("Return");
 
 
         searchButton.addActionListener(new ActionListener() {
@@ -97,6 +97,7 @@ public class HomePage extends JFrame {
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchPanel.add(b);
         searchPanel.add(searchButton);
+
 
         JButton cameraB = new JButton("Camera");
         JButton lightB = new JButton("Light");
@@ -236,11 +237,15 @@ public class HomePage extends JFrame {
         microphoneB.setPreferredSize(new Dimension(200, 30));
 
         JLabel usernameLabel = new JLabel("Username");
-        JButton returnButton = new JButton("Return");
+        JButton logout = new JButton("Logout");
+
+        JButton returnbutton = new JButton("Deliver back");
+
 
         JPanel userPanel = new JPanel(new BorderLayout());
         userPanel.add(usernameLabel, BorderLayout.WEST);
-        userPanel.add(returnButton, BorderLayout.EAST);
+        userPanel.add(logout,BorderLayout.EAST);
+        userPanel.add(returnbutton,BorderLayout.NORTH);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(searchPanel, BorderLayout.NORTH);
