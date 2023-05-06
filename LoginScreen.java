@@ -2,6 +2,8 @@ import java.sql.*;
 import javax.swing.*;
 import java.awt.event.*;
 
+
+
 public class LoginScreen extends JFrame implements ActionListener {
     JTextField usernameField;
     JPasswordField passwordField;
@@ -121,8 +123,7 @@ public class LoginScreen extends JFrame implements ActionListener {
     }
 
 
-        public static void main (String[]args){
-            new LoginScreen();
-        }
+    public static void main (String[]args){
+        new LoginScreen();
     }
-
+}

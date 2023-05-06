@@ -17,6 +17,12 @@ public class HomePage extends JFrame {
         String password = "password";
         return DriverManager.getConnection(url, username, password);
     }
+    private JTable getReadOnlyTable(String category) throws SQLException {
+        ResultSet resultSet = getDataFromDatabase(category);
+        JTable table = new JTable(ProductTable.buildTableModel(resultSet));
+        table.setEnabled(false); // disable editing
+        return table;
+    }
 
     //Fetching data from product database
     private ResultSet getDataFromDatabase(String category) throws SQLException {
@@ -78,8 +84,7 @@ public class HomePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    ResultSet resultSet = getDataFromDatabase("camera");
-                    JTable table = new JTable(ProductTable.buildTableModel(resultSet));
+                    JTable table = getReadOnlyTable("camera");
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Cameras");
                     dialog.add(new JScrollPane(table));
@@ -92,12 +97,14 @@ public class HomePage extends JFrame {
             }
         });
 
+// repeat for other categories
+
+
         lightB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    ResultSet resultSet = getDataFromDatabase("light");
-                    JTable table = new JTable(ProductTable.buildTableModel(resultSet));
+                    JTable table = getReadOnlyTable("light");
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Lights");
                     dialog.add(new JScrollPane(table));
@@ -110,12 +117,14 @@ public class HomePage extends JFrame {
             }
         });
 
+// repeat for other categories
+
+
         cablesB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    ResultSet resultSet = getDataFromDatabase("cables");
-                    JTable table = new JTable(ProductTable.buildTableModel(resultSet));
+                    JTable table = getReadOnlyTable("cables");
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Cables");
                     dialog.add(new JScrollPane(table));
@@ -128,12 +137,14 @@ public class HomePage extends JFrame {
             }
         });
 
+// repeat for other categories
+
+
         propsB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    ResultSet resultSet = getDataFromDatabase("props");
-                    JTable table = new JTable(ProductTable.buildTableModel(resultSet));
+                    JTable table = getReadOnlyTable("props");
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Props");
                     dialog.add(new JScrollPane(table));
@@ -146,12 +157,14 @@ public class HomePage extends JFrame {
             }
         });
 
+// repeat for other categories
+
+
         camerastandsB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    ResultSet resultSet = getDataFromDatabase("stands");
-                    JTable table = new JTable(ProductTable.buildTableModel(resultSet));
+                    JTable table = getReadOnlyTable("stands");
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Stands");
                     dialog.add(new JScrollPane(table));
@@ -164,12 +177,14 @@ public class HomePage extends JFrame {
             }
         });
 
+// repeat for other categories
+
+
         microphoneB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    ResultSet resultSet = getDataFromDatabase("microphone");
-                    JTable table = new JTable(ProductTable.buildTableModel(resultSet));
+                    JTable table = getReadOnlyTable("microphone");
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Microphones");
                     dialog.add(new JScrollPane(table));
@@ -181,6 +196,9 @@ public class HomePage extends JFrame {
                 }
             }
         });
+
+// repeat for other categories
+
 
         cameraB.setPreferredSize(new Dimension(200, 30));
         lightB.setPreferredSize(new Dimension(200, 30));
