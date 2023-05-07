@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.sql.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -68,7 +69,21 @@ public class LoginScreen extends JFrame implements ActionListener {
             ResultSet result = statement.executeQuery();
             if (result.next()) {
                 JOptionPane.showMessageDialog(this, "Login successful!");
+                String uname = result.getNString("username");
                 HomePage homePage = new HomePage();
+                JLabel usernameLabel = new JLabel("User: " + uname);
+                JButton returnButton = new JButton("Deliver back");
+                returnButton.setPreferredSize(new Dimension(150, 30));
+                JPanel userPanel = new JPanel(new BorderLayout());
+                userPanel.add(usernameLabel, BorderLayout.WEST);
+                userPanel.add(returnButton, BorderLayout.EAST);
+                homePage.getContentPane().add(userPanel, BorderLayout.SOUTH);
+                returnButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        //Return logic: Here.....
+                    }
+                });
                 homePage.setVisible(true);
                 dispose();
             } else {

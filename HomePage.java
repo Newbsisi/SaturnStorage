@@ -228,6 +228,14 @@ public class HomePage extends JFrame {
             }
         });
 
+        JButton logout = new JButton("Logout");
+            logout.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    logoutfunction();
+                }
+            });
+
         // Layout constraints
         cameraB.setPreferredSize(new Dimension(200, 30));
         lightB.setPreferredSize(new Dimension(200, 30));
@@ -236,16 +244,9 @@ public class HomePage extends JFrame {
         camerastandsB.setPreferredSize(new Dimension(200, 30));
         microphoneB.setPreferredSize(new Dimension(200, 30));
 
-        JLabel usernameLabel = new JLabel("Username");
-        JButton logout = new JButton("Logout");
-
-        JButton returnbutton = new JButton("Deliver back");
-
 
         JPanel userPanel = new JPanel(new BorderLayout());
-        userPanel.add(usernameLabel, BorderLayout.WEST);
         userPanel.add(logout,BorderLayout.EAST);
-        userPanel.add(returnbutton,BorderLayout.NORTH);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(searchPanel, BorderLayout.NORTH);
@@ -257,6 +258,16 @@ public class HomePage extends JFrame {
         this.setSize(800, 500);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
+    }
+
+    // Logout logic
+    public void logoutfunction() {
+        this.setVisible(false);
+
+        LoginScreen loginScreen = new LoginScreen();
+        loginScreen.setVisible(true);
+
+        dispose();
     }
 
     public static void main(String[] args) {
