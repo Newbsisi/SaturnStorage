@@ -48,7 +48,7 @@ public class LoginScreen extends JFrame implements ActionListener {
         }
     }
 
-    private void validateLogin() {
+    public void validateLogin() {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
@@ -68,22 +68,47 @@ public class LoginScreen extends JFrame implements ActionListener {
 
             ResultSet result = statement.executeQuery();
             if (result.next()) {
+                boolean isAdmin = result.getBoolean("isAdmin");
                 JOptionPane.showMessageDialog(this, "Login successful!");
+
                 String uname = result.getNString("username");
                 HomePage homePage = new HomePage();
+
+                // If the logged-in user is an admin, show the admin button
+                if (isAdmin) {
+                    JButton adminButton = new JButton("Admin Panel");
+                    adminButton.setPreferredSize(new Dimension(150, 30));
+                    JPanel adminPanel = new JPanel(new BorderLayout());
+                    adminPanel.add(adminButton, BorderLayout.EAST);
+                    homePage.getContentPane().add(adminPanel, BorderLayout.SOUTH);
+
+                    // Add an ActionListener to the Admin Button to open the Admin Panel
+                    adminButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (isAdmin) {
+                                AdminPanel adminPanel = new AdminPanel();
+                                adminPanel.setVisible(true);
+                            }
+                        }
+                    });
+                }
+
                 JLabel usernameLabel = new JLabel("User: " + uname);
                 JButton returnButton = new JButton("Deliver back");
                 returnButton.setPreferredSize(new Dimension(150, 30));
                 JPanel userPanel = new JPanel(new BorderLayout());
                 userPanel.add(usernameLabel, BorderLayout.WEST);
                 userPanel.add(returnButton, BorderLayout.EAST);
-                homePage.getContentPane().add(userPanel, BorderLayout.SOUTH);
+                homePage.getContentPane().add(userPanel, BorderLayout.NORTH);
+
                 returnButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         //Return logic: Here.....
                     }
                 });
+
                 homePage.setVisible(true);
                 dispose();
             } else {
@@ -95,6 +120,7 @@ public class LoginScreen extends JFrame implements ActionListener {
             ex.printStackTrace();
         }
     }
+
 
     private boolean isValidUsername(String username) {
         // Check if the username is null or empty

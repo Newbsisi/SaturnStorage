@@ -5,6 +5,7 @@ import java.sql.*;
 
 
 public class HomePage extends JFrame {
+    private String username;
 
     //Database connection
     private Connection getConnection() throws SQLException {
@@ -44,7 +45,7 @@ public class HomePage extends JFrame {
         loanMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // handle loan button click
+
                 JOptionPane.showMessageDialog(table, "Item loaned!");
             }
         });
@@ -72,7 +73,7 @@ public class HomePage extends JFrame {
         super("SaturnStorage");
 
         JTextField b = new JTextField("Search");
-        b.setPreferredSize(new Dimension(250,30));
+        b.setPreferredSize(new Dimension(250, 30));
         JButton searchButton = new JButton("Search");
         JButton returnButton = new JButton("Return");
 
@@ -229,12 +230,12 @@ public class HomePage extends JFrame {
         });
 
         JButton logout = new JButton("Logout");
-            logout.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    logoutfunction();
-                }
-            });
+        logout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logoutfunction();
+            }
+        });
 
         // Layout constraints
         cameraB.setPreferredSize(new Dimension(200, 30));
@@ -245,8 +246,10 @@ public class HomePage extends JFrame {
         microphoneB.setPreferredSize(new Dimension(200, 30));
 
 
+
         JPanel userPanel = new JPanel(new BorderLayout());
-        userPanel.add(logout,BorderLayout.EAST);
+        userPanel.add(logout, BorderLayout.EAST);
+
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(searchPanel, BorderLayout.NORTH);
