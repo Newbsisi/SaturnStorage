@@ -6,8 +6,8 @@ import org.apache.commons.codec.binary.Hex;
 
 public class SaltHashing<random> {
 
-    String username = "saltuser";
-    String password = "Password3?";
+    String username = "salthashing";
+    String password = "1234Abcd!";
     SecureRandom random = new SecureRandom();
 
     byte[] salt;
@@ -18,6 +18,7 @@ public class SaltHashing<random> {
     public SaltHashing() {
         salt = new byte[4];
         random.nextBytes(salt);
+        System.out.println(salt);
 
         try {
             md = MessageDigest.getInstance("SHA-256");
