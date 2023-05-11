@@ -105,7 +105,7 @@ public class LoginScreen extends JFrame implements ActionListener {
                                 }
                             }
                         });
-                    }
+                    } else {
                     JLabel usernameLabel = new JLabel("User: " + username);
                     JButton returnButton = new JButton("Deliver back");
                     returnButton.setPreferredSize(new Dimension(150, 30));
@@ -114,6 +114,7 @@ public class LoginScreen extends JFrame implements ActionListener {
                     userPanel.add(returnButton, BorderLayout.EAST);
                     homePage.getContentPane().add(userPanel, BorderLayout.SOUTH);
                     homePage.getContentPane().add(userPanel, BorderLayout.NORTH);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(this, "Invalid username or password!");
                 }
