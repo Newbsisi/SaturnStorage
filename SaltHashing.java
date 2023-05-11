@@ -2,6 +2,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.sql.*;
 import java.lang.Object;
+import org.apache.commons.codec.binary.Hex;
 
 public class SaltHashing<random> {
 
@@ -15,7 +16,7 @@ public class SaltHashing<random> {
     MessageDigest md;
 
     public SaltHashing() {
-        salt = new byte[16];
+        salt = new byte[4];
         random.nextBytes(salt);
 
         try {
@@ -28,13 +29,15 @@ public class SaltHashing<random> {
     }
 
     public void insertUser() {
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/users", "user_auth", "password");
-                PreparedStatement pstmt = conn.prepareStatement("INSERT INTO login_info (username, salt, hashed_password) VALUES (?, ?, ?)")) {
+        try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/users", "user_auth", "password");
+                PreparedStatement pstmt = conn.prepareStatement("INSERT INTO login_info (username, salt, hashed_password) VALUES (?, ?, ?)"); 
             pstmt.setString(1, username);
-            pstmt.setString(2, DatatypeConverter.printHexBinary(salt));
+            pstmt.setString(2, Hex.encodeHexString(salt));
             pstmt.setBytes(3, hashedPassword);
             pstmt.executeUpdate();
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
