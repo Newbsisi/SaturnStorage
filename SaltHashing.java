@@ -1,7 +1,6 @@
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.sql.*;
-import java.lang.Object;
 import org.apache.commons.codec.binary.Hex;
 
 public class SaltHashing<random> {
