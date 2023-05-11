@@ -83,6 +83,7 @@ public class LoginScreen extends JFrame implements ActionListener {
                 if (Arrays.equals(computedHashedPassword, storedHashedPassword)) {
                     boolean isAdmin = result.getBoolean("isAdmin");
                     JOptionPane.showMessageDialog(this, "Login successful!");
+                    dispose();
         
                     HomePage homePage = new HomePage();
         
