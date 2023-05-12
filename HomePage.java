@@ -1,11 +1,11 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 
 
 public class HomePage extends JFrame {
-    private String username;
 
     //Database connection
     private Connection getConnection() throws SQLException {
@@ -34,24 +34,25 @@ public class HomePage extends JFrame {
             }
         };
 
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // set single row selection mode
-        table.setRowHeight(20); // set row height
-        table.setGridColor(Color.BLACK); // set grid color
-        table.setShowGrid(true); // show grid lines
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setRowHeight(20);
+        table.setGridColor(Color.BLACK);
+        table.setShowGrid(true);
 
-        // create popup menu
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem loanMenuItem = new JMenuItem("Loan");
         loanMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                JOptionPane.showMessageDialog(table, "Item loaned!");
+                System.out.println("Loan menu item clicked"); // Debug statement
+                String username = LoginScreen.loggedInUsername;
+                if (username != null){
+                    loanItem(table, category, username);
+                }
             }
         });
         popupMenu.add(loanMenuItem);
 
-        // add mouse listener to table
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -59,6 +60,7 @@ public class HomePage extends JFrame {
                     int row = table.rowAtPoint(e.getPoint());
                     if (row >= 0 && row < table.getRowCount()) {
                         table.setRowSelectionInterval(row, row);
+                        System.out.println("Right-clicked on row: " + row); // Debug statement
                         popupMenu.show(e.getComponent(), e.getX(), e.getY());
                     }
                 }
@@ -67,6 +69,58 @@ public class HomePage extends JFrame {
 
         return table;
     }
+
+    private void loanItem(JTable table, String category, String username) {
+        int selectedRow = table.getSelectedRow();
+
+        if (selectedRow >= 0) {
+            try {
+                String itemId = table.getValueAt(selectedRow, 0).toString();
+                System.out.println("Selected item ID: " + itemId); // Debug statement
+
+                if (itemId == null || itemId.isEmpty()) {
+                    System.out.println("Invalid item ID"); // Debug statement
+                    return;
+                }
+
+                if (username == null || username.isEmpty()) {
+                    System.out.println("Invalid username"); // Debug statement
+                    return;
+                }
+
+                Connection connection = getConnection();
+                System.out.println("Database connection established"); // Debug statement
+
+                String sourceTable = category;
+                String destinationTable = "items_on_loan";
+
+                String insertQuery = "INSERT INTO " + destinationTable + " (id, Username, Name, Brand, Type) SELECT ?, ?, Name, Brand, Type FROM " + sourceTable + " WHERE id = ?";
+                PreparedStatement statement = connection.prepareStatement(insertQuery);
+                statement.setString(1, itemId);
+                statement.setString(2, username);
+                statement.setString(3, itemId);
+
+                int rowsAffected = statement.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    // Loan successful, remove the loaned item from the table
+                    DefaultTableModel model = (DefaultTableModel) table.getModel();
+                    model.removeRow(selectedRow);
+
+                    JOptionPane.showMessageDialog(table, "Item loaned!");
+                } else {
+                    System.out.println("No rows affected"); // Debug statement
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                System.out.println("SQL Exception occurred: " + ex.getMessage()); // Debug statement
+            }
+        } else {
+            System.out.println("No row selected"); // Debug statement
+        }
+    }
+
+
 
 
     public HomePage() {
@@ -121,7 +175,7 @@ public class HomePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    JTable table = getReadOnlyTable("camera");
+                    JTable table = getReadOnlyTable("Camera");
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Cameras");
                     dialog.add(new JScrollPane(table));
@@ -140,7 +194,7 @@ public class HomePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    JTable table = getReadOnlyTable("light");
+                    JTable table = getReadOnlyTable("Light");
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Lights");
                     dialog.add(new JScrollPane(table));
@@ -159,7 +213,7 @@ public class HomePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    JTable table = getReadOnlyTable("cables");
+                    JTable table = getReadOnlyTable("Cables");
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Cables");
                     dialog.add(new JScrollPane(table));
@@ -178,7 +232,7 @@ public class HomePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    JTable table = getReadOnlyTable("props");
+                    JTable table = getReadOnlyTable("Props");
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Props");
                     dialog.add(new JScrollPane(table));
@@ -197,7 +251,7 @@ public class HomePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    JTable table = getReadOnlyTable("stands");
+                    JTable table = getReadOnlyTable("Stands");
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Stands");
                     dialog.add(new JScrollPane(table));
@@ -216,7 +270,7 @@ public class HomePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    JTable table = getReadOnlyTable("microphone");
+                    JTable table = getReadOnlyTable("Microphone");
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Microphones");
                     dialog.add(new JScrollPane(table));

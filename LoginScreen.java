@@ -13,9 +13,12 @@ import java.security.NoSuchAlgorithmException;
 
 
 public class LoginScreen extends JFrame implements ActionListener {
-    JTextField usernameField;
+    private final JTextField usernameField; // Declare as final
     JPasswordField passwordField;
     JButton submitButton;
+
+    static String loggedInUsername;
+
 
     public LoginScreen() {
         // Set up the GUI components
@@ -26,7 +29,8 @@ public class LoginScreen extends JFrame implements ActionListener {
         passwordField.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    validateLogin();
+                    String username = usernameField.getText();
+                    validateLogin(username);
                 }
             }
         });
@@ -51,12 +55,12 @@ public class LoginScreen extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == submitButton) {
-            validateLogin();
+            String username = usernameField.getText();
+            validateLogin(username);
     }
 }
 
-    public void validateLogin() {
-        String username = usernameField.getText();
+    public void validateLogin(String username) {
         String password = new String(passwordField.getPassword());
     
         // Validate the username and password
@@ -83,6 +87,7 @@ public class LoginScreen extends JFrame implements ActionListener {
                 if (Arrays.equals(computedHashedPassword, storedHashedPassword)) {
                     boolean isAdmin = result.getBoolean("isAdmin");
                     JOptionPane.showMessageDialog(this, "Login successful!");
+                    loggedInUsername = username;
                     dispose();
         
                     HomePage homePage = new HomePage();

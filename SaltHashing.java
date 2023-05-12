@@ -5,8 +5,8 @@ import org.apache.commons.codec.binary.Hex;
 
 public class SaltHashing<random> {
 
-    String username = "salthashing";
-    String password = "1234Abcd!";
+    String username = "Lucasfrederiksen";
+    String password = "Password3?";
     SecureRandom random = new SecureRandom();
 
     byte[] salt;
