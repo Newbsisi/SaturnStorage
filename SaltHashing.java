@@ -23,7 +23,7 @@ public class SaltHashing {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-
+        
         insertUser(username, isAdmin ? 1: 0);
     }
 
