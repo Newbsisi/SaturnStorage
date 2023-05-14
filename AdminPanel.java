@@ -81,9 +81,9 @@ public class AdminPanel extends JFrame implements ActionListener {
             boolean isUserAdded = saltHashing.insertUser(username, password, isAdmin);
             
             if (isUserAdded) {
-            JOptionPane.showMessageDialog(this, "User added successfully!");
+                JOptionPane.showMessageDialog(this, "User added successfully!");
             } else {
-            JOptionPane.showMessageDialog(this, "Failed to add user.");
+                JOptionPane.showMessageDialog(this, "Failed to add user, duplicate username.");
             }
 
         }
