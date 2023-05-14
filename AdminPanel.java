@@ -10,6 +10,7 @@ import java.sql.SQLException;
 public class AdminPanel extends JFrame implements ActionListener {
     private JTextField usernameField;
     private JPasswordField passwordField;
+    private JCheckBox adminCheckbox;
 
     public AdminPanel() {
         // Set up the GUI components for adding a new user
@@ -19,35 +20,42 @@ public class AdminPanel extends JFrame implements ActionListener {
         passwordField = new JPasswordField(10);
         JButton submitButton = new JButton("Add User");
         submitButton.addActionListener(this);
-
+    
+        adminCheckbox = new JCheckBox("Admin");
+    
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-
+    
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 10, 0, 10);
         panel.add(usernameLabel, gbc);
-
+    
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 0, 0, 10);
         panel.add(usernameField, gbc);
-
+    
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.insets = new Insets(10, 10, 10, 10);
         panel.add(passwordLabel, gbc);
-
+    
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.insets = new Insets(10, 0, 10, 10);
         panel.add(passwordField, gbc);
-
+    
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        panel.add(adminCheckbox, gbc);
+    
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.insets = new Insets(10, 0, 10, 10);
         panel.add(submitButton, gbc);
-
+    
         add(panel);
         setTitle("Admin Panel - Add User");
         setSize(400, 250);
@@ -56,41 +64,19 @@ public class AdminPanel extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-
     public void actionPerformed(ActionEvent e) {
 
         if (e.getActionCommand().equals("Add User")) {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
+            boolean isAdmin = adminCheckbox.isSelected();
 
             // Validate the username and password
             if (!isValidUsername(username) || !isValidPassword(password)) {
                 JOptionPane.showMessageDialog(this, "Invalid username or password!");
                 return;
             }
-
-            // Add the new user to the database
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/users", "user_auth", "password");
-                String sql = "INSERT INTO usernames_and_passwords (username, password) VALUES (?, ?)";
-                PreparedStatement statement = connection.prepareStatement(sql);
-                statement.setString(1, username);
-                statement.setString(2, password);
-
-                int rowsAffected = statement.executeUpdate();
-                if (rowsAffected == 1) {
-                    JOptionPane.showMessageDialog(this, "User added successfully!");
-                    usernameField.setText("");
-                    passwordField.setText("");
-                } else {
-                    JOptionPane.showMessageDialog(this, "User was not added successfully!");
-                }
-            } catch (ClassNotFoundException ex) {
-                ex.printStackTrace();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
+            SaltHashing saltHashing = new SaltHashing(username, password, isAdmin);
         }
     }
 
