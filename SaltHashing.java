@@ -38,7 +38,10 @@ public class SaltHashing {
             pstmt.setBoolean(4, isAdmin);
             pstmt.executeUpdate();
             return true;
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLIntegrityConstraintViolationException e) {
+            e.printStackTrace();
+            return false;
+        }catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             return false;
         }
