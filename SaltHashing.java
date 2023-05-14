@@ -27,7 +27,7 @@ public class SaltHashing {
         insertUser(username, password, isAdmin);
     }
 
-    public void insertUser(String username, String password, Boolean isAdmin) {
+    public boolean insertUser(String username, String password, Boolean isAdmin) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/users", "user_auth", "password");
@@ -37,8 +37,10 @@ public class SaltHashing {
             pstmt.setBytes(3, hashedPassword);
             pstmt.setBoolean(4, isAdmin);
             pstmt.executeUpdate();
+            return true;
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
+            return false;
         }
     }
 }
