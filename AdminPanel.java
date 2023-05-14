@@ -57,8 +57,8 @@ public class AdminPanel extends JFrame implements ActionListener {
     }
 
 
-
     public void actionPerformed(ActionEvent e) {
+
         if (e.getActionCommand().equals("Add User")) {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
