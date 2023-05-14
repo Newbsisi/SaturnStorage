@@ -82,6 +82,8 @@ public class AdminPanel extends JFrame implements ActionListener {
             
             if (isUserAdded) {
                 JOptionPane.showMessageDialog(this, "User added successfully!");
+                usernameField.setText("");
+                passwordField.setText("");
             } else {
                 JOptionPane.showMessageDialog(this, "Failed to add user, duplicate username.");
             }
