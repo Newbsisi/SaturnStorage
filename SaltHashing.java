@@ -23,8 +23,6 @@ public class SaltHashing {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        
-        insertUser(username, password, isAdmin);
     }
 
     public boolean insertUser(String username, String password, Boolean isAdmin) {
