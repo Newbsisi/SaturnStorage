@@ -3,11 +3,7 @@ import java.security.*;
 import java.sql.*;
 import org.apache.commons.codec.binary.Hex;
 
-public class SaltHashing<random> {
-
-    String username = "newuser1";
-    String password = "Password1234!";
-    int isAdmin = 0;
+public class SaltHashing {
     SecureRandom random = new SecureRandom();
 
     byte[] salt;
@@ -15,7 +11,7 @@ public class SaltHashing<random> {
 
     MessageDigest md;
 
-    public SaltHashing() {
+    public SaltHashing(String username, String password, boolean isAdmin) {
         salt = new byte[4];
         random.nextBytes(salt);
         System.out.println(salt);
@@ -29,24 +25,23 @@ public class SaltHashing<random> {
         }
     }
 
-    public void insertUser() {
+    public boolean insertUser(String username, String password, Boolean isAdmin) {
         try {
-        Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/users", "user_auth", "password");
-                PreparedStatement pstmt = conn.prepareStatement("INSERT INTO login_info (username, salt, hashed_password, isAdmin) VALUES (?, ?, ?, ?)"); 
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO login_info (username, salt, hashed_password, isAdmin) VALUES (?, ?, ?, ?)"); 
             pstmt.setString(1, username);
             pstmt.setString(2, Hex.encodeHexString(salt));
             pstmt.setBytes(3, hashedPassword);
-            pstmt.setInt(4, isAdmin);
+            pstmt.setBoolean(4, isAdmin);
             pstmt.executeUpdate();
-        } catch (SQLException | ClassNotFoundException e) {
+            return true;
+        } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
+            return false;
+        }catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;
         }
     }
-
-    public static void main(String[] args) {
-        SaltHashing saltHashing = new SaltHashing();
-        saltHashing.insertUser();
-    }
 }
-
