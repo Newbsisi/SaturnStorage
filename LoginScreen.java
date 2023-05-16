@@ -96,6 +96,14 @@ public class LoginScreen extends JFrame implements ActionListener {
                     if (isAdmin) {
                         JLabel usernameLabel = new JLabel("User: " + username);
                         JButton returnButton = new JButton("Deliver back");
+
+                        returnButton.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                ReturnMethod returnMethod = new ReturnMethod(username);
+                                returnMethod.setVisible(true);
+                            }
+                        });
                         returnButton.setPreferredSize(new Dimension(150, 30));
                         JPanel userPanel = new JPanel(new BorderLayout());
                         userPanel.add(usernameLabel, BorderLayout.WEST);
@@ -121,7 +129,15 @@ public class LoginScreen extends JFrame implements ActionListener {
                     } else {
                     JLabel usernameLabel = new JLabel("User: " + username);
                     JButton returnButton = new JButton("Deliver back");
-                    returnButton.setPreferredSize(new Dimension(150, 30));
+                    returnButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            ReturnMethod returnMethod = new ReturnMethod(username);
+                            returnMethod.setVisible(true);
+                        }
+                    });
+
+                        returnButton.setPreferredSize(new Dimension(150, 30));
                     JPanel userPanel = new JPanel(new BorderLayout());
                     userPanel.add(usernameLabel, BorderLayout.WEST);
                     userPanel.add(returnButton, BorderLayout.EAST);

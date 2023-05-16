@@ -94,23 +94,52 @@ public class HomePage extends JFrame {
                 String sourceTable = category;
                 String destinationTable = "items_on_loan";
 
-                String insertQuery = "INSERT INTO " + destinationTable + " (id, Username, Name, Brand, Type) SELECT ?, ?, Name, Brand, Type FROM " + sourceTable + " WHERE id = ?";
-                PreparedStatement statement = connection.prepareStatement(insertQuery);
-                statement.setString(1, itemId);
-                statement.setString(2, username);
-                statement.setString(3, itemId);
+                String selectQuery = "SELECT * FROM " + sourceTable + " WHERE id = ?";
+                PreparedStatement selectStatement = connection.prepareStatement(selectQuery);
+                selectStatement.setString(1, itemId);
+                ResultSet resultSet = selectStatement.executeQuery();
 
-                int rowsAffected = statement.executeUpdate();
+                if (resultSet.next()) {
+                    // Get the data from the source table
+                    String name = resultSet.getString("Name");
+                    String brand = resultSet.getString("Brand");
+                    String type = resultSet.getString("Type");
+                    String itemCategory = resultSet.getString("Category");
 
-                if (rowsAffected > 0) {
-                    // Loan successful, remove the loaned item from the table
-                    DefaultTableModel model = (DefaultTableModel) table.getModel();
-                    model.removeRow(selectedRow);
+                    // Insert the data into the destination table
+                    String insertQuery = "INSERT INTO " + destinationTable + " (id, Username, Name, Brand, Type, Category) VALUES (?, ?, ?, ?, ?, ?)";
+                    PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
+                    insertStatement.setString(1, itemId);
+                    insertStatement.setString(2, username);
+                    insertStatement.setString(3, name);
+                    insertStatement.setString(4, brand);
+                    insertStatement.setString(5, type);
+                    insertStatement.setString(6, itemCategory);
+                    int rowsAffected = insertStatement.executeUpdate();
 
-                    JOptionPane.showMessageDialog(table, "Item loaned!");
+                    if (rowsAffected > 0) {
+                        // Remove the loaned item from the source table
+                        String deleteQuery = "DELETE FROM " + sourceTable + " WHERE id = ?";
+                        PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery);
+                        deleteStatement.setString(1, itemId);
+                        deleteStatement.executeUpdate();
+
+                        // Remove the row from the table
+                        DefaultTableModel model = (DefaultTableModel) table.getModel();
+                        model.removeRow(selectedRow);
+
+                        JOptionPane.showMessageDialog(table, "Item loaned!");
+                    } else {
+                        System.out.println("Failed to insert into destination table"); // Debug statement
+                    }
                 } else {
-                    System.out.println("No rows affected"); // Debug statement
+                    System.out.println("No matching item found in source table"); // Debug statement
                 }
+
+                // Close the result set, statements, and connection
+                resultSet.close();
+                selectStatement.close();
+                connection.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 System.out.println("SQL Exception occurred: " + ex.getMessage()); // Debug statement
