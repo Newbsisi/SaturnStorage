@@ -6,9 +6,11 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import java.awt.event.*;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 
 
@@ -62,14 +64,6 @@ public class LoginScreen extends JFrame implements ActionListener {
 }
 
     public void validateLogin(String username) {
-        List<String> allowedIPs = Arrays.asList("192.168.0.239", "192.168.5");
-
-                String clientIP = InetAddress.getLocalHost().getHostAddress();
-
-                if (!allowedIPs.contains(clientIP)) {
-                    JOptionPane.showMessageDialog(this, "Access denied. Your IP address is not allowed.");
-                    return;
-                }
         String password = new String(passwordField.getPassword());
     
         // Validate the username and password
@@ -79,6 +73,14 @@ public class LoginScreen extends JFrame implements ActionListener {
         }
     
         try {
+            List<String> allowedIPs = Arrays.asList("192.168.0.239", "192.168.56.1");
+
+                String clientIP = InetAddress.getLocalHost().getHostAddress();
+
+                if (!allowedIPs.contains(clientIP)) {
+                    JOptionPane.showMessageDialog(this, "Access denied. Your IP address is not allowed.");
+                    return;
+                }
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/users", "user_auth", "password");
             String sql = "SELECT salt, hashed_password, isAdmin FROM login_info WHERE username = ?";
@@ -161,6 +163,8 @@ public class LoginScreen extends JFrame implements ActionListener {
             }
         } catch (SQLException | ClassNotFoundException | NoSuchAlgorithmException | DecoderException e) {
             ((Throwable) e).printStackTrace();
+        } catch (UnknownHostException e1) {
+            e1.printStackTrace();
         }
     }
 
