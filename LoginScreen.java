@@ -81,6 +81,7 @@ public class LoginScreen extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(this, "Access denied. Your IP address is not allowed.");
                     return;
                 }
+                
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/users", "user_auth", "password");
             String sql = "SELECT salt, hashed_password, isAdmin FROM login_info WHERE username = ?";
