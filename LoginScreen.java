@@ -5,6 +5,7 @@ import javax.swing.*;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import java.awt.event.*;
+import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -61,6 +62,14 @@ public class LoginScreen extends JFrame implements ActionListener {
 }
 
     public void validateLogin(String username) {
+        List<String> allowedIPs = Arrays.asList("192.168.0.239", "192.168.5");
+
+                String clientIP = InetAddress.getLocalHost().getHostAddress();
+
+                if (!allowedIPs.contains(clientIP)) {
+                    JOptionPane.showMessageDialog(this, "Access denied. Your IP address is not allowed.");
+                    return;
+                }
         String password = new String(passwordField.getPassword());
     
         // Validate the username and password
