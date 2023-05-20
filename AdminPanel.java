@@ -9,6 +9,7 @@ public class AdminPanel extends JFrame implements ActionListener {
     private JPasswordField passwordField;
     private JCheckBox adminCheckbox;
     private JTextArea userListTextArea;
+    private JTextField deleteField;
 
     public AdminPanel() {
         // Set up the GUI components for adding a new user
@@ -70,6 +71,28 @@ public class AdminPanel extends JFrame implements ActionListener {
         gbc.insets = new Insets(10, 0, 20, 10);
         panel.add(listUsersButton, gbc);
 
+        JLabel deleteLabel = new JLabel("Delete Username:");
+        deleteField = new JTextField(10);
+        JButton deleteButton = new JButton("Delete User");
+        deleteButton.addActionListener(this);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.insets = new Insets(10, 400, 0, 10);
+        panel.add(deleteLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        gbc.insets = new Insets(10, 0, 0, 100);
+        panel.add(deleteField, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        gbc.insets = new Insets(10, 10, 10, 25);
+        panel.add(deleteButton, gbc);
+
+
+
         add(panel);
         setTitle("Admin Panel");
         setSize(800, 600);
@@ -81,6 +104,63 @@ public class AdminPanel extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
 
+        if (e.getActionCommand().equals("Delete User")) {
+            String usernameToDelete = deleteField.getText();
+            
+            // Validate the username
+            if (!isValidUsername(usernameToDelete)) {
+                JOptionPane.showMessageDialog(this, "Invalid username!");
+                return;
+            }
+            
+            // Confirm the deletion with the user
+            int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the user: " + usernameToDelete + "?");
+            
+            if (confirm == JOptionPane.YES_OPTION) {
+                Connection conn = null;
+                PreparedStatement stmt = null;
+                try {
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    conn = DriverManager.getConnection("jdbc:mysql://localhost/users", "user_auth", "password");
+            
+                    // Prepare the statement to delete the user
+                    stmt = conn.prepareStatement("DELETE FROM login_info WHERE username = ?");
+                    stmt.setString(1, usernameToDelete);
+            
+                    // Execute the delete statement
+                    int rowsDeleted = stmt.executeUpdate();
+            
+                    if (rowsDeleted > 0) {
+                        JOptionPane.showMessageDialog(this, "User deleted successfully!");
+                        deleteField.setText("");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "User not found.");
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                } catch (ClassNotFoundException e1) {
+                    e1.printStackTrace();
+                } finally {
+                    // Close the resources
+                    if (stmt != null) {
+                        try {
+                            stmt.close();
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    if (conn != null) {
+                        try {
+                            conn.close();
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+        
+        
         if (e.getActionCommand().equals("List Users")) {
             Connection conn = null;
             PreparedStatement stmt = null;
