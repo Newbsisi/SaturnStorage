@@ -160,7 +160,7 @@ public class AdminPanel extends JFrame implements ActionListener {
             }
         }
         
-        
+        //Method for displaying users
         if (e.getActionCommand().equals("List Users")) {
             Connection conn = null;
             PreparedStatement stmt = null;
@@ -205,7 +205,7 @@ public class AdminPanel extends JFrame implements ActionListener {
             }
         }
         
-
+//Method for adding user
         if (e.getActionCommand().equals("Add User")) {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());

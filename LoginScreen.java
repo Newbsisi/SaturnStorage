@@ -71,9 +71,9 @@ public class LoginScreen extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this, "Invalid username or password!");
             return;
         }
-    
+    // IP whitelisting
         try {
-            List<String> allowedIPs = Arrays.asList("192.168.0.239", "192.168.56.1", "10.5.0.2");
+            List<String> allowedIPs = Arrays.asList("192.168.0.239", "192.168.56.1", "10.5.0.2", "192.168.1.137");
 
                 String clientIP = InetAddress.getLocalHost().getHostAddress();
 

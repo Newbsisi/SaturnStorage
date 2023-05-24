@@ -70,6 +70,7 @@ public class HomePage extends JFrame {
         return table;
     }
 
+    //Method for loaning an item
     private void loanItem(JTable table, String category, String username) {
         int selectedRow = table.getSelectedRow();
 
@@ -217,7 +218,7 @@ public class HomePage extends JFrame {
             }
         });
 
-        // repeat for other categories
+
 
         lightB.addActionListener(new ActionListener() {
             @Override
@@ -236,7 +237,7 @@ public class HomePage extends JFrame {
             }
         });
 
-        // repeat for other categories
+
 
         cablesB.addActionListener(new ActionListener() {
             @Override
@@ -255,7 +256,7 @@ public class HomePage extends JFrame {
             }
         });
 
-        // repeat for other categories
+
 
         propsB.addActionListener(new ActionListener() {
             @Override
@@ -274,7 +275,7 @@ public class HomePage extends JFrame {
             }
         });
 
-        // repeat for other categories
+
 
         camerastandsB.addActionListener(new ActionListener() {
             @Override
@@ -293,7 +294,7 @@ public class HomePage extends JFrame {
             }
         });
 
-        // repeat for other categories
+
 
         microphoneB.addActionListener(new ActionListener() {
             @Override

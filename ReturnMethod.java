@@ -61,6 +61,7 @@ public class ReturnMethod extends JFrame {
         return statement.executeQuery();
     }
 
+    //Method for returning the loaned item and deleting the item in items_on_loan
     private void returnSelectedItem() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow >= 0) {
@@ -97,6 +98,7 @@ public class ReturnMethod extends JFrame {
         }
     }
 
+    //Method for moving loaned item back to the correct category
     private void moveItemToCategory(String itemId) {
         try {
             Connection connection = getConnection();
@@ -144,7 +146,7 @@ public class ReturnMethod extends JFrame {
     }
 
 
-
+//Database connection
     private Connection getConnection() throws SQLException {
         // Establish a connection to the database
         String url = "jdbc:mysql://127.0.0.1:3306/products";
